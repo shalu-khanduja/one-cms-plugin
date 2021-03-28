@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="sponsorship" destination_name="term" has_meta="true" taxonomy="sponsorships" >
+            <!-- <offset attribute="0" />
+            <limit attribute="5" /> -->
+            <col>
+                <field>sponsorship.sponsor_name</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>sponsorship.slug</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>sponsorship.sponsor_name</field>
+                <to is_meta="true">display_name</to>
+            </col>
+            <col>
+                <field>sponsorship.sponsor_url</field>
+                <to is_meta="true">brand_url</to>
+            </col>
+            <col>
+                <field>sponsorship.sponsor_image</field>
+                <to is_meta="true"
+                    is_reference="true"
+                    ref_taxonomy="attachment"
+                    ref_type="content">logo</to>
+            </col>
+            <col>
+                <field>sponsorship.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

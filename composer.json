@@ -1,0 +1,49 @@
+{
+    "name": "rahulnagar/vipcs",
+    "authors": [
+        {
+            "name": "Rahul",
+            "email": "rahul.nagar@infobeans.com"
+        }
+    ],
+    "require": {
+        "ext-pdo": "*",
+        "ext-simplexml": "*",
+        "monolog/monolog": "^2.1",
+        "phpoffice/phpspreadsheet": "^1.15",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpmd/phpmd" : "@stable",
+        "squizlabs/php_codesniffer": "3.*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.1 || ^0.5 || ^0.6.2 || ^0.7",
+        "automattic/vipwpcs": "2.*"
+    },
+"autoload": {
+        "psr-4": {
+            "CustomHook\\PreCommitHook\\": "hook-install/",
+            "IDG2Migration\\": "src/"
+        },
+        "classmap": [ "src/inc/" ]
+    },
+    "extra": {
+        "class": "CustomHook\\PreCommitHook\\Hook"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "CustomHook\\PreCommitHook\\Hook::run"
+        ],
+        "post-update-cmd": [
+            "CustomHook\\PreCommitHook\\Hook::run"
+        ]
+    },
+    "config": {
+        "rule_set_info": {
+            "remote_url":"http://103.231.46.2:10187/vip-coding-standard/",
+            "phpcs_rule_set":"phpcs.ruleset.xml",
+            "phpmd_rule_set":"phpmd.ruleset.xml",
+            "phpmd_exclude_dir":"migrations,hook-install",
+            "phpcs_exclude_dir":"migrations,hook-install"
+        }
+    }
+}

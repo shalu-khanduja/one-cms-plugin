@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="cms_user" destination_name="wp_users" has_meta="true" taxonomy="" >
+            <groupby attribute="cms_user.id,person.id" />
+            <order attribute="cms_user.id" descending="true" />
+            <!--<offset attribute="0" />
+            <limit attribute="" /> -->
+            <filters type="AND" >
+                <condition attribute="(cms_user.brand_permissions &amp; 1)" operator="gt" value="0" value_type="integer" />
+                <condition attribute="cms_user.username" operator="neq" value="''" value_type="string" />
+                <!--<condition attribute="cms_user.updated_at" operator="gt" value="to_date('2021/02/05', 'YYYY/MM/dd')" value_type="string" />-->
+            </filters>
+            <col>
+                <field>cms_user.username</field>
+                <to>user_login</to>
+            </col>
+            <col ignore="true">
+                <field>cms_user.display_name</field>
+                <to>display_name</to>
+            </col>
+            <col ignore="true">
+                <field>cms_user.user_url</field>
+                <to>user_url</to>
+            </col>
+            <col>
+                <field has_alias="true" alias_name="pr">person.job_title</field>
+                <to is_meta="true">job_title</to>
+            </col>
+            <col>
+                <field has_alias="true" alias_name="pr">person.unique_name</field>
+                <to is_meta="true">nickname</to>
+            </col>
+            <col>
+                <field>assigned_business_units</field>
+                <to is_meta="true" has_default="true">assigned_business_units</to>
+            </col>
+           <col ignore="true">
+                <field>password</field>
+                <to has_default="true">user_pass</to>
+            </col>
+            <col>
+                <field has_alias="true"  alias_name="pr">person.name_first</field>
+                <to is_meta="true">first_name</to>
+            </col>
+            <col>
+                <field  has_alias="true"  alias_name="pr">person.name_last</field>
+                <to is_meta="true">last_name</to>
+            </col>
+            <col>
+                <field>cms_user.email</field>
+                <to>user_email</to>
+            </col>
+            <col>
+                <field has_alias="true"  alias_name="pr">person.summary</field>
+                <to is_meta="true">description</to>
+            </col>
+            <col>
+                <field has_alias="true"  alias_name="pr">person.public_email</field>
+                <to is_meta="true">social_email</to>
+            </col>
+            <col>
+                <field has_alias="true" dont_use_alias="true" alias_name="psn">array_to_string(array_agg(CONCAT( person_social_network_int.social_network_id, '|', person_social_network_int.url)), ',') as social_network</field>
+                <to is_meta="true"  is_social_media="true">url</to>
+            </col>
+            <col>
+                <field>cms_user.person_id</field>
+                <to is_meta="true">person_id</to>
+            </col>
+            <col>
+                <field>person.image_id</field>
+                <to is_meta="true"
+                    ref_taxonomy="attachment">profile-photo</to>
+            </col>
+            <col>
+                <field>cms_user.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+            <col>
+                <field dont_use_alias="true">array_to_string(array_agg(distinct cms_group.name), ',') as user_role</field>
+                <to is_meta="true">wp_capabilities</to>
+            </col>
+            <joins>
+                <link_entity link_type="inner" table_name="person" from_column="id" to_column="person_id" alias="pr"  />
+                <link_entity link_type="left" table_name="person_social_network_int" from_column="person_id" to_column="person_id" alias="psn"/>
+                <link_entity link_type="left" table_name="cms_user_group_int" from_column="cms_user_id" to_column="id" alias="cug" />
+                <link_entity link_type="inner" table_name="cms_group" from_column="id" to_column="cms_user_group_int.cms_group_id" dont_use_source_alias="true" alias="cg" />
+            </joins>
+        </entity>
+    </entities>
+</map>

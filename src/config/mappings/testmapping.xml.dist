@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="users" destination_name="wp_users" >
+            <col>
+                <field>id</field>
+                <to>ID</to>
+            </col>
+            <col>
+                <field>username</field>
+                <to>user_login</to>
+            </col>
+            <col>
+                <field>email</field>
+                <to>user_email</to>
+            </col>
+            <col>
+                <field>full_name</field>
+                <to>user_nicename</to>
+            </col>
+            <col>
+                <field>created_at</field>
+                <to>user_registered</to>
+            </col>
+        </entity>
+        <entity source_name="posts" destination_name="wp_posts" >
+            <col>
+                <field>id</field>
+                <to>ID</to>
+            </col>
+            <col>
+                <field>title</field>
+                <to>post_title</to>
+            </col>
+            <col>
+                <field>content</field>
+                <to>post_content</to>
+            </col>
+            <col>
+                <field>user_id</field>
+                <to>post_author</to>
+            </col>
+            <col>
+                <field>created_at</field>
+                <to>post_date</to>
+            </col>
+            <col ignore="true">
+                <field>unused</field>
+                <to></to>
+            </col>
+        </entity>
+    </entities>
+</map>

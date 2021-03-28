@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="category" destination_name="wp_terms" has_meta="true" taxonomy="category" >
+            <order attribute="category_golden_map.golden_id" ascending="true" />
+            <!--<offset attribute="0" />
+            <limit attribute="500" /> -->
+            <filters type="AND" >
+                <condition attribute="category_golden_map.golden_id" operator="in" value="" value_type="string" />
+            </filters>
+            <col>
+                <field>category.name_plural</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>category.slug</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>category.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+            <col>
+                <field  has_alias="true" alias_name="cgm">category_golden_map.golden_id</field>
+                <to is_meta="true">golden_id</to>
+            </col>
+            <!--<col>
+                <field ignore="true">parent</field>
+                <to>parent</to>
+            </col>-->
+            <col>
+                <field>category.page_description</field>
+                <to is_term_taxonomy="true">description</to>
+            </col>
+            <joins>
+                <link_entity link_type="inner" table_name="category_golden_map" from_column="category_id" to_column="id" alias="cgm" />
+            </joins>
+        </entity>
+    </entities>
+</map>

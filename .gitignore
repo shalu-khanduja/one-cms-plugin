@@ -1,0 +1,18 @@
+/hook-install/
+*.ini
+src/logs/*
+/vendor/
+composer.lock
+#src/config/GlobalConstant.php
+*.log
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+nbproject/

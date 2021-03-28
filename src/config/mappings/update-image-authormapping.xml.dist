@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="image" destination_name="wp_posts" has_meta="true" content_type="attachment" >
+            <order attribute="image.id" descending="true" />
+            <!-- <offset attribute="0" />
+            <limit attribute="5" /> -->
+            <groupby attribute="image.id,image_file.url,image_file.width,image_file.height" />
+            <joins>
+                <link_entity
+                        link_type="inner"
+                        table_name="image_file"
+                        from_column="image_id"
+                        to_column="id"
+                        alias="cli"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="content_license_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="cl"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="tag_content_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="tgi"
+                        join_where="AND tag_content_int.content_type_id = 6"
+                />
+            </joins>
+            <filters type="AND" >
+                <condition attribute="image_file.image_type_id" operator="eq" value="16" value_type="integer" />
+                <condition attribute="content_license_int.content_type_id" operator="eq" value="6" value_type="integer" />
+                <condition attribute="content_license_int.license_id" operator="not in" value="(13,11,61,62,59,2,8,5)" value_type="string" />
+            </filters>
+            <col>
+                <field>image.alt_text</field>
+                <to>post_title</to>
+            </col>
+            <col>
+                <field>image.default_caption</field>
+                <to>post_excerpt</to>
+            </col>
+            <col>
+                <field>image.uploaded_on</field>
+                <to>post_date</to>
+            </col>
+            <col>
+                <field>image.uploaded_by</field>
+                <to is_reference="true" 
+                    ref_type="user">post_author</to>
+            </col>
+            <col>
+                <field>image_file.url</field>
+                <to>guid</to>
+            </col>
+            <col>
+                <field>image.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

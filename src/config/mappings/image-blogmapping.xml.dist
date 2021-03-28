@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="image" destination_name="wp_posts" has_meta="true" content_type="attachment" >
+            <order attribute="image.id" descending="true" />
+            <!-- <offset attribute="0" />
+            <limit attribute="100" /> -->
+            <joins>
+                <link_entity
+                        link_type="inner"
+                        table_name="image_file"
+                        from_column="image_id"
+                        to_column="id"
+                        alias="cli"
+                        join_where="AND image_file.image_type_id = 16"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="article_blog"
+                        from_column="image_id"
+                        to_column="id"
+                        alias="a_blog"
+                />
+            </joins>
+            <filters type="AND" >
+                <condition attribute="article_blog.brand_owner" operator="eq" value="1" value_type="integer" />
+                <condition attribute="article_blog.is_podcast" operator="eq" value="false" value_type="boolean" />
+                <condition attribute="article_blog.image_id" operator="gt" value="0" value_type="integer" />
+                <!-- <condition attribute="image.uploaded_on" operator="gt" value="to_date('2021/02/05', 'YYYY/MM/dd')" value_type="string" /> -->
+            </filters>
+            <col>
+                <field>image.alt_text</field>
+                <to>post_title</to>
+            </col>
+            <col>
+                <field>image.alt_text as image_alt_text_meta</field>
+                <to is_meta="true">_wp_attachment_image_alt</to>
+            </col>
+            <col>
+                <field>image.default_caption</field>
+                <to>post_excerpt</to>
+            </col>
+            <col>
+                <field>image.credit</field>
+                <to is_meta="true">credit</to>
+            </col>
+            <col>
+                <field>image.credit_url</field>
+                <to is_meta="true">credit_url</to>
+            </col>
+            <col>
+                <field>image.notes</field>
+                <to is_meta="true">image_rights_notes</to>
+            </col>
+            <col>
+                <field>image.uploaded_on</field>
+                <to>post_date</to>
+            </col>
+            <col>
+                <field>image.uploaded_by</field>
+                <to is_callback="getAuthorReferenceByOldIds" do_insert="off">post_author</to>
+            </col>
+            <col>
+                <field>image_file.url</field>
+                <to>guid</to>
+            </col>
+            <col>
+                <field>image_file.width</field>
+                <to is_meta="true">width</to>
+            </col>
+            <col>
+                <field>image_file.height</field>
+                <to is_meta="true">height</to>
+            </col>
+            <col>
+                <field>image.id</field>
+                <to 
+                is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="company" destination_name="wp_terms" has_meta="true" taxonomy="manufacturer" >
+            <order attribute="company.id" descending="true" />
+            <filters type="AND" >
+                <condition attribute="company.id" operator="neq" value="13876" value_type="string" />
+            </filters>
+
+              <col>
+                <field>company.name</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>company.url</field>
+                <to is_meta="true">url</to>
+            </col>
+            <col>
+                <field>company.phone</field>
+                <to is_meta="true">phone</to>
+            </col>
+            <col>
+                <field>company.company_type_id</field>
+                <to is_meta="true">company_type_id</to>
+            </col>
+            <col>
+                <field>company.pg_manufacturer</field>
+                <to is_meta="true">pg_manufacturer</to>
+            </col>
+            <col>
+                <field>company.vendor_code</field>
+                <to is_meta="true">vendor_code</to>
+            </col>
+            <col>
+                <field>company.editorial_relevance</field>
+                <to is_meta="true">editorial_relevance</to>
+            </col>
+            <col>
+                <field>company.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

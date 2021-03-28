@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="article_display" destination_name="term" has_meta="true" taxonomy="article_type" >
+            <order attribute="article_display.id" descending="true" />
+            <filters type="AND" >
+                <condition attribute="article_display.id" operator="in" value="(1, 10, 11, 19)" value_type="string" />
+            </filters>
+            <!--<offset attribute="0" />
+            <limit attribute="2" />-->
+            <col>
+                <field>article_display.description</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>article_display.slug</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>article_display.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+        <entity source_name="article_bug" destination_name="term" has_meta="true" taxonomy="article_type" >
+            <order attribute="article_bug.id" descending="true" />
+            <filters type="AND" >
+                <condition attribute="article_bug.id" operator="in" value="(17, 6)" value_type="string" />
+            </filters>
+            <!--<offset attribute="0" />
+            <limit attribute="2" />-->
+            <col>
+                <field>article_bug.description</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>article_bug.slug</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>article_bug.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

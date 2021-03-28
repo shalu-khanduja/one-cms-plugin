@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="tag" destination_name="wp_terms" has_meta="true" taxonomy="post_tag" >
+            <order attribute="tag.id" descending="true" />
+            <filters type="AND" >
+                <condition attribute="tag.status" operator="eq" value="1" value_type="integer" />
+            </filters>
+            <!--<offset attribute="0" />
+            <limit attribute="3" />-->
+            <col>
+                <field>tag.label</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>tag.tag</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>tag.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

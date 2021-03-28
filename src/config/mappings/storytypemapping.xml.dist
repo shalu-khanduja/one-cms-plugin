@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="article_type" destination_name="wp_terms" has_meta="true" taxonomy="story_types" >
+            <order attribute="article_type.id" descending="true" />
+            <!--<offset attribute="0" />
+            <limit attribute="2" />-->
+            <col>
+                <field>article_type.description</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>article_type.slug</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>article_type.description_singular</field>
+                <to is_meta="true">description_singular</to>
+            </col>
+            <col>
+                <field>article_type.description_plural</field>
+                <to is_meta="true">description_plural</to>
+            </col>
+            <col>
+                <field>article_type.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

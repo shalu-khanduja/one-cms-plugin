@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="tag" destination_name="wp_terms" has_meta="true" taxonomy="asset_tag" >
+            <joins>
+                <link_entity link_type="inner" table_name="tag_content_int" from_column="tag_id" to_column="id" alias="it" />
+                <link_entity link_type="inner" table_name="content_license_int" from_column="content_id" to_column="tag_content_int.content_id" dont_use_source_alias="true" alias="cli" />
+            </joins>
+            <filters type="AND" >
+                <condition attribute="tag_content_int.content_type_id" operator="eq" value="6" value_type="integer" />
+                <condition attribute="content_license_int.license_id" operator="not in" value="(13,11,61,62,59,2,8,5)" value_type="string" />
+                <condition attribute="tag.status" operator="eq" value="1" value_type="integer" />
+            </filters>
+             <groupby attribute="tag.label, tag.tag, tag.id" />
+            <col>
+                <field>tag.label</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>tag.tag</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>tag.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

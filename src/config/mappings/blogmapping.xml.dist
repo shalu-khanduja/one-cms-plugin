@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="article_blog" destination_name="wp_terms" has_meta="true" taxonomy="blogs" >
+            <order attribute="article_blog.id" descending="true" />
+            <!--<offset attribute="0" />
+            <limit attribute="3" />-->
+            <filters type="AND" >
+                <condition attribute="article_blog.brand_owner" operator="eq" value="1" value_type="integer" />
+                <condition attribute="article_blog.is_podcast" operator="eq" value="false" value_type="boolean" />
+            </filters>
+            <col>
+                <field>article_blog.blog_name</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>article_blog.slug</field>
+                <to>slug</to>
+            </col>
+            <col>
+                <field>article_blog.blurb</field>
+                <to is_term_taxonomy="true">description</to>
+            </col>
+            <col>
+                <field>article_blog.sponsorship_id</field>
+                <to is_meta="true" is_reference="true" ref_taxonomy="sponsorships" >sponsorship</to>
+            </col>
+            <col>
+                <field>article_blog.short_name</field>
+                <to is_meta="true">short_name</to>
+            </col>
+            <col>
+                <field>article_blog.short_blurb</field>
+                <to is_meta="true">short_description</to>
+            </col>
+            <col>
+                <field>article_blog.url_twitter</field>
+                <to is_meta="true">social_twitter</to>
+            </col>
+            <col>
+                <field>article_blog.custom_header</field>
+                <to is_meta="true">custom_header</to>
+            </col>
+            <col>
+                <field>article_blog.status</field>
+                <to is_meta="true">status</to>
+            </col>
+            <col>
+                <field>article_blog.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+            <col>
+                <field>article_blog.image_id</field>
+                <to
+                    is_meta="true"
+                    is_reference="true"
+                    ref_taxonomy="attachment"
+                    ref_type="content"
+                >logo</to>
+            </col>
+        </entity>
+    </entities>
+</map>

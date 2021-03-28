@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="article" destination_name="wp_posts" has_meta="true" taxonomy="" content_type="post" >
+            <groupby attribute="article.id, article_xhtml.article_id, article_blog.is_podcast, article_bug.id, cms_workflow_status.slug" />
+            <order attribute="article.id, categories_priority" descending="false" />
+            <!--<offset attribute="0" />
+            <limit attribute="3" />-->
+            <joins>
+                <link_entity
+                        link_type="left"
+                        table_name="article_xhtml"
+                        from_column="article_id"
+                        to_column="id"
+                        alias="arxht"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="person_content_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="pci"
+                        join_where="AND person_content_int.content_type_id = 1"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="person"
+                        from_column="id"
+                        to_column="person_content_int.person_id"
+                        alias="per"
+                        dont_use_source_alias="true"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="cms_user"
+                        from_column="person_id"
+                        to_column="person.id"
+                        alias="cusr"
+                        dont_use_source_alias="true"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="article_blog"
+                        from_column="id"
+                        to_column="article_blog_id"
+                        alias="arb"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="category_content_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="cci"
+                        join_where="AND category_content_int.content_type_id = 1"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="tag_content_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="tci"
+                        join_where="AND tag_content_int.content_type_id = 1"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="article_bug"
+                        from_column="id"
+                        to_column="article_bug_id"
+                        alias="abu"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="cms_workflow_status"
+                        from_column="id"
+                        to_column="statusid"
+                        alias="abu"
+                />
+            </joins>
+            <filters type="AND" >
+                <condition attribute="article.article_bug_id" operator="eq" value="6" value_type="integer" />
+                <condition attribute="article.brand_owner" operator="eq" value="1" value_type="integer" />
+                <condition attribute="article.statusid" operator="not in" value="(15, 7)" value_type="string" />
+            </filters>
+            <col>
+                <field>article.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+            <col>
+                <field>article.title</field>
+                <to>post_title</to>
+            </col>
+            <col>
+                <field>article.deck</field>
+                <to multi_title="1" path_key="titles.headline.value" is_meta="true">deck</to>
+            </col>
+            <col>
+                <field>article.summary</field>
+                <to multi_title="1" path_key="titles.headline.additional.headline_desc" is_meta="true">summary</to>
+            </col>
+            <col>
+                <field>article.summary as post_excerpt</field>
+                <to>post_excerpt</to>
+            </col>
+            <col>
+                <field>article_xhtml.xhtml</field>
+                <to is_callback="sanitizeContent" >post_content</to>
+            </col>
+            <col>
+                <field>article.meta_title</field>
+                <to multi_title="1" path_key="titles.seo.value" is_meta="true">meta_title</to>
+            </col>
+            <col>
+                <field>article.slug</field>
+                <to multi_title="1" path_key="titles.seo.additional.seo_slug" is_meta="true">slug</to>
+            </col>
+            <col>
+                <field>article.meta_description</field>
+                <to multi_title="1" path_key="titles.seo.additional.seo_desc" is_meta="true">meta_description</to>
+            </col>
+            <col>
+                <field>article.canonical_url</field>
+                <to multi_title="1" path_key="titles.seo.additional.seo_canonical_url" is_meta="true">canonical_url</to>
+            </col>
+            <col>
+                <field>article.og_title</field>
+                <to multi_title="1" path_key="titles.social.value" is_meta="true">og_title</to>
+            </col>
+            <col>
+                <field>article.og_description</field>
+                <to multi_title="1" path_key="titles.social.additional.social_desc" is_meta="true">og_description</to>
+            </col>
+            <col>
+                <field>article.date_embargo</field>
+                <to is_meta="true">embargo_date</to>
+            </col>
+            <col>
+                <field>cms_workflow_status.slug</field>
+                <to is_callback="getStatusReferenceByOldSlug" do_insert="off" >post_status</to>
+            </col>
+            <col>
+                <field>article.slug as post_name</field>
+                <to>post_name</to>
+            </col>
+            <col>
+                <field>article.article_type_id</field>
+                <to wp_term_relationships="1" is_callback="getArticleTypeReferenceByOldIds" do_insert="on" is_meta="true" >article_type_id</to>
+            </col>
+            <col>
+                <field>article.article_display_id</field>
+                <to wp_term_relationships="1" is_callback="getArticleDisplayReferenceByOldIds" do_insert="on" is_meta="true" >article_display_id</to>
+            </col>
+            <col>
+                <field>article.sponsorship_id</field>
+                <to wp_term_relationships="1" is_callback="getArticleSponsorshipReferenceByOldIds" do_insert="on" is_meta="true" >sponsorship_id</to>
+            </col>
+            <col>
+                <field>article.article_blog_id</field>
+                <to wp_term_relationships="1" is_callback="getArticleBlogReferenceByOldIds" do_insert="on" is_meta="true" >article_blog_id</to>
+            </col>
+            <col>
+                <field>article_blog.is_podcast</field>
+                <to wp_term_relationships="1" is_callback="getArticlePodcastReferenceByOldIds" do_insert="on" is_meta="true" >is_podcast</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT category_content_int.category_id), ',') as tagged_categories</field>
+                <to wp_term_relationships="1" is_callback="getCategoryReferenceByOldIds" do_insert="on" is_meta="true" >category_id</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT cms_user.id), ',') as author_ids</field>
+                <to is_callback="getAuthorReferenceByOldIds" do_insert="off" >post_author</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT tag_content_int.tag_id), ',') as tagged_ids</field>
+                <to wp_term_relationships="1" is_callback="getTagReferenceByOldIds" do_insert="on" is_meta="true" >tag_id</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT category_content_int.priority), ',') as categories_priority</field>
+                <to>unused_categories_priority</to>
+            </col>
+            <col>
+                <field>article.updated_by</field>
+                <to is_meta="true" is_callback="getAuthorReferenceByOldIdsForMeta" do_insert="on" >post_author</to>
+            </col>
+            <col>
+                <field>article.external_url</field>
+                <to is_meta="true">external_url</to>
+            </col>
+            <col>
+                <field>article.date_live</field>
+                <to>post_date</to>
+            </col>
+            <col>
+                <field>article.created_on</field>
+                <to is_meta="true">created_on</to>
+            </col>
+            <col>
+                <field>article.date_expires</field>
+                <to is_meta="true">expiry_date</to>
+            </col>
+            <col>
+                <field>article.article_bug_id</field>
+                <to>article_bug_id</to>
+            </col>
+            <col>
+                <field>article.image_id</field>
+                <to is_callback="getImageReferenceByOldId" do_insert="on" is_meta="true">_thumbnail_id</to>
+            </col>
+            <col>
+                <field>article.is_premium</field>
+                <to is_meta="true">is_premium</to>
+            </col>
+            <col>
+                <field>article.teaser_override</field>
+                <to is_meta="true">teaser_override</to>
+            </col>
+            <col>
+                <field>article.teaser_paragraphs</field>
+                <to is_meta="true">teaser_paragraphs</to>
+            </col>
+            <col>
+                <field>article.updated_on</field>
+                <to>post_modified</to>
+            </col>
+            <col>
+                <field>article.disable_autopagination</field>
+                <to is_meta="true">disable_pagination</to>
+            </col>
+            <col>
+                <field>article.exclude_from_sailthru_feeds</field>
+                <to is_meta="true">exclude_from_sailthru</to>
+            </col>
+            <col>
+                <field>article.is_slug_locked</field>
+                <to is_meta="true">is_slug_locked</to>
+            </col>
+            <col>
+                <field>article.podcast_url</field>
+                <to is_meta="true">postcast_url</to>
+            </col>
+            <col>
+                <field>article.locale_id</field>
+                <to is_meta="true">locale_id</to>
+            </col>
+            <col>
+                <field>article.is_paid</field>
+                <to is_meta="true">is_paid</to>
+            </col>
+        </entity>
+    </entities>
+</map>

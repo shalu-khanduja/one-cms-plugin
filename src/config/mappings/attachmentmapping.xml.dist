@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="image" destination_name="wp_posts" has_meta="true" content_type="attachment" >
+            <order attribute="image.id" descending="false" />
+            <!-- <offset attribute="0" />
+            <limit attribute="50" /> -->
+            <groupby attribute="image.id,image_file.url,image_file.width,image_file.height" />
+            <joins>
+                <link_entity
+                        link_type="inner"
+                        table_name="image_file"
+                        from_column="image_id"
+                        to_column="id"
+                        alias="cli"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="content_license_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="cl"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="tag_content_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="tgi"
+                        join_where="AND tag_content_int.content_type_id = 6"
+                />
+            </joins>
+            <filters type="AND" >
+                <condition attribute="image_file.image_type_id" operator="eq" value="16" value_type="integer" />
+                <condition attribute="content_license_int.content_type_id" operator="eq" value="6" value_type="integer" />
+                <condition attribute="content_license_int.license_id" operator="not in" value="(13,11,61,62,59,2,8,5)" value_type="string" />
+                <!-- <condition attribute="image.uploaded_on" operator="gt" value="to_date('2021/02/05', 'YYYY/MM/dd')" value_type="string" /> -->
+            </filters>
+            <col>
+                <field>image.alt_text</field>
+                <to>post_title</to>
+            </col>
+            <col>
+                <field>image.alt_text as image_alt_text_meta</field>
+                <to is_meta="true">_wp_attachment_image_alt</to>
+            </col>
+            <col>
+                <field>image.default_caption</field>
+                <to>post_excerpt</to>
+            </col>
+            <col>
+                <field>image.credit</field>
+                <to is_meta="true">credit</to>
+            </col>
+            <col>
+                <field>image.credit_url</field>
+                <to is_meta="true">credit_url</to>
+            </col>
+            <col>
+                <field>image.notes</field>
+                <to is_meta="true">image_rights_notes</to>
+            </col>
+            <col>
+                <field>image.uploaded_on</field>
+                <to>post_date</to>
+            </col>
+            <col>
+                <field>image.uploaded_by</field>
+                <to is_callback="getAuthorReferenceByOldIds" do_insert="off">post_author</to>
+            </col>
+            <col>
+                <field>image_file.url</field>
+                <to>guid</to>
+            </col>
+            <col>
+                <field>image_file.width</field>
+                <to is_meta="true">width</to>
+            </col>
+            <col>
+                <field>image_file.height</field>
+                <to is_meta="true">height</to>
+            </col>
+            <col>
+                <field>image.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT tag_content_int.tag_id),',') as tag_content_int_tag_id</field>
+                <to wp_term_relationships="1" is_callback="getAssetTagReferenceByOldIds" do_insert="on" is_meta="true">tag_content_int_tag_id</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT content_license_int.license_id),',') as content_license_int_license_id</field>
+                <to wp_term_relationships="1" is_callback="getAssetImageRightsReferenceByOldIds" do_insert="on" is_meta="true">content_license_int_license_id</to>
+            </col>
+        </entity>
+    </entities>
+</map>

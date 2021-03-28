@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="product" destination_name="wp_posts" has_meta="true" taxonomy="" content_type="product" >
+            <groupby attribute="product.id, product_vendor_direct.product_id, gallery_member_int.gallery_id, product_pricing_provider_int.pricing_provider_id, product_pricing_provider_int.provider_product_id, cms_workflow_status.slug" />
+            <order attribute="product.id, categories_priority" descending="false" />
+            <!--<offset attribute="0" />
+            <limit attribute="3" />-->
+             <joins>
+                <link_entity
+                        link_type="left"
+                        table_name="product_pricing_provider_int"
+                        from_column="product_id"
+                        to_column="id"
+                        alias="pppi"
+                        join_where="AND product_pricing_provider_int.pricing_provider_id = 2"
+
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="product_vendor_direct"
+                        from_column="product_id"
+                        to_column="id"
+                        alias="pvd"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="category_content_int"
+                        from_column="content_id"
+                        to_column="id"
+                        alias="cci"
+                        join_where="AND category_content_int.content_type_id = 2"
+                />
+              <link_entity
+                        link_type="left"
+                        table_name="gallery"
+                        from_column="id"
+                        to_column="gallery_id"
+                        alias="gmi"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="gallery_member_int"
+                        from_column="gallery_id"
+                        to_column="gallery.id"
+                        alias="gmi"
+                        dont_use_source_alias="true"
+                        join_where="AND gallery_member_int.gallery_member_type_id = 1"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="image"
+                        from_column="id"
+                        to_column="gallery_member_int.content_id"
+                        alias="image"
+                        dont_use_source_alias="true"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="image_file"
+                        from_column="image_id"
+                        to_column="image.id"
+                        alias="imagef"
+                        join_where="AND image_file.image_type_id = 16"
+                        dont_use_source_alias="true"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="cms_workflow_status"
+                        from_column="id"
+                        to_column="status"
+                        alias="cws"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="products_articles"
+                        from_column="product_id"
+                        to_column="id"
+                        alias="pa"
+                />
+                <link_entity
+                        link_type="inner"
+                        table_name="article"
+                        from_column="id"
+                        to_column="products_articles.article_id"
+                        dont_use_source_alias="true"
+                        join_where="AND article.brand_owner = 1 AND article.statusid not in (15,7)"
+                        alias="article"
+                />
+                <link_entity
+                        link_type="left"
+                        table_name="cms_workflow_event"
+                        from_column="object_id"
+                        to_column="id"
+                        join_where="AND cms_workflow_event.content_type_id = 2"
+                />
+            </joins>
+            <filters type="AND" >
+                <condition attribute="product.product_display_id" operator="in" value="(1,2)" value_type="string" />
+                <condition attribute="product.status" operator="eq" value="6" value_type="integer" />
+                <!-- <condition attribute="cms_workflow_event.status_date" operator="gt" value="to_date('2021/02/05', 'YYYY/MM/dd')" value_type="string" /> -->
+            </filters>
+            <col>
+                <field>product.title</field>
+                <to>post_title</to>
+            </col>
+            <col>
+                <field>product.slug</field>
+                <to>post_name</to>
+            </col>
+            <col>
+                <field>product.title as product_name</field>
+                <to region_info="1" path_key="product_info.name" is_meta="true">product_name</to>
+            </col>
+            <col>
+                <field>product.prepend_company_title</field>
+                <to region_info="1" path_key="product_info.append_manufacturer" is_meta="true">prepend_company_title</to>
+            </col>
+            <col>
+                <field>product.price</field>
+                <to region_info="1" path_key="pricing.price" is_meta="true">price</to>
+            </col>
+             <col>
+                <field>product_pricing_provider_int.pricing_provider_id</field>
+                <to region_info="1" path_key="purchase_options.vendor_codes[].vendor" is_meta="true">pricing_provider_id</to>
+            </col>
+            <col>
+                <field>product_pricing_provider_int.provider_product_id</field>
+                <to region_info="1" path_key="purchase_options.vendor_codes[].code" is_meta="true">provider_product_id</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT CONCAT(product_vendor_direct.id,' *|* ', product_vendor_direct.text, ' *|* ', product_vendor_direct.link, ' *|* ', product_vendor_direct.price)), ' ||,|| ') AS product_vendor_direct_ids</field>
+                <to is_callback="getGlobalInfoReferenceByOldIds" is_meta="true" do_insert="on">product_vendor_direct_ids</to>
+            </col>
+            <col>
+                <field>product.date_live</field>
+                <to>post_date</to>
+            </col>
+            <col>
+                <field>cms_workflow_status.slug</field>
+                <to is_callback="getStatusReferenceByOldSlug" do_insert="off" >post_status</to>
+            </col>
+            <col>
+                <field>product.company_id</field>
+                <to wp_term_relationships="1" is_callback="getMaufactureDisplayReferenceByOldIds" do_insert="on" is_meta="true" >company_id</to>
+            </col>
+            <col>
+                <field>Array_to_string(Array_agg(category_content_int.category_id ORDER BY category_content_int.priority ASC), ',') AS tagged_categories</field>
+                <to wp_term_relationships="1" is_callback="getCategoryReferenceByOldIds" do_insert="on" is_meta="true" >category_id</to>
+            </col>
+            <col>
+                <field>product_pricing_provider_int.pricing_provider_id as vendor_code</field>
+                <to wp_term_relationships="1" is_callback="getVendorCodeReferenceByOldIds" do_insert="on" is_meta="true" >vendor_code</to>
+            </col>
+            <col>
+                <field>array_to_string(array_agg(DISTINCT image_file.image_id), ',') as _thumbnail_ids</field>
+                 <to is_callback="getProductImageReferenceByOldId" do_insert="on" is_meta="true">_thumbnail_id</to>
+            </col>
+            <col>
+                <field>product.product_display_id</field>
+                <to is_meta="true">product_display_id</to>
+            </col>
+            <col>
+                <field>product.date_announce</field>
+                <to is_meta="true">date_announce</to>
+            </col>
+            <col>
+                <field>product.date_launch</field>
+                <to is_meta="true">date_launch</to>
+            </col>
+            <col>
+                <field>product.company_url</field>
+                <to is_meta="true">company_url</to>
+            </col>
+             <col>
+                <field>product.company_url_text</field>
+                <to is_meta="true">company_url_text</to>
+            </col>
+             <col>
+                <field>product.vendor_url</field>
+                <to is_meta="true">vendor_url</to>
+            </col>
+            <col>
+                <field>product.gallery_id</field>
+                <to is_meta="true">gallery_id</to>
+            </col>
+            <col>
+                <field>product.staff_comment</field>
+                <to is_meta="true">staff_comment</to>
+            </col>
+
+            <col>
+                <field>array_to_string(array_agg(DISTINCT category_content_int.priority), ',') as categories_priority</field>
+                <to>unused_categories_priority</to>
+            </col>
+            <!--
+            <col>
+                <field>array_to_string(array_agg(DISTINCT CONCAT(products_articles.article_id, ' | ' ,products_articles.insert_type)),', ') as product_article_ids</field>
+                <to is_callback="getProductsArticlesReferenceByOldIds" do_insert="off" is_meta="true">reviews</to>
+            </col>
+            -->
+            <col>
+                <field>product.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>

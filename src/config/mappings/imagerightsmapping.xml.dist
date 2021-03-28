@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map>
+    <entities>
+        <entity source_name="content_license" destination_name="wp_terms"
+            has_meta="true" taxonomy="asset_image_rights" >
+            <filters type="AND" >
+                <condition attribute="content_license.id" operator="not in" value="(13,11,61,62,59,2,8,5)" value_type="string" />
+            </filters>
+            <col>
+                <field>content_license.name</field>
+                <to>name</to>
+            </col>
+            <col>
+                <field>content_license.description</field>
+                <to is_term_taxonomy="true">description</to>
+            </col>
+            <col>
+                <field>content_license.id</field>
+                <to is_meta="true">old_id_in_onecms</to>
+            </col>
+        </entity>
+    </entities>
+</map>
